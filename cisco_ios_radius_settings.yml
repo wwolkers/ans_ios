@@ -24,7 +24,8 @@
         parents: "aaa server radius dynamic-author"
         lines:
           - "client 10.63.10.95 server-key {{ radiuskey }}"
-          - "no client 10.63.41.67 server-key {{ radiuskey }}"
+          - "no client 10.63.41.67"
+          - "no client 10.63.41.69"
     - name: "POSTPONE CONFIGURATION SAVE"
       when: "(set_AAA_radius.changed == true)"
       set_fact: configured=true
@@ -35,8 +36,9 @@
       ios_config:
         parents: "radius server CLEARPASS-PROD"
         lines:
-          - "no address ipv4 10.63.41.67 auth-port 1812 acct-port 1813"
           - "address ipv4 10.63.10.95 auth-port 1812 acct-port 1813" 
+          - "no address ipv4 10.63.41.67 auth-port 1812 acct-port 1813"
+          - "no address ipv4 10.63.41.69 auth-port 1812 acct-port 1813"
     - name: "POSTPONE CONFIGURATION SAVE"
       when: "(set_RADIUSSERVER_CLEARPASS.changed == true)"
       set_fact: configured=true
