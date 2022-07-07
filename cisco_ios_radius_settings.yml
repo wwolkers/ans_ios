@@ -21,10 +21,10 @@
       when: "('10.63.10.95' != get_ios_config.stdout_lines[0][0])"
       register: set_AAA_radius
       ios_config:
+        parents: "aaa server radius dynamic-author"
         lines:
-          - "aaa server radius dynamic-author " 
-          - "client 10.63.10.95 server-key {{ radiuskey }} "
-          - "no client 10.63.41.67 server-key {{ radiuskey }} "
+          - "client 10.63.10.95 server-key {{ radiuskey }}"
+          - "no client 10.63.41.67 server-key {{ radiuskey }}"
     - name: "POSTPONE CONFIGURATION SAVE"
       when: "(set_AAA_radius.changed == true)"
       set_fact: configured=true
@@ -33,10 +33,10 @@
       when: "('10.63.10.95' != get_ios_config.stdout_lines[1][0])"
       register: set_RADIUSSERVER_CLEARPASS
       ios_config:
+        parents; "radius server CLEARPASS-PROD"
         lines:
-          - "radius server CLEARPASS-PROD "
-          - "no address ipv4 10.63.41.67 auth-port 1812 acct-port 1813 "
-          - "address ipv4 10.63.10.95 auth-port 1812 acct-port 1813 " 
+          - "no address ipv4 10.63.41.67 auth-port 1812 acct-port 1813"
+          - "address ipv4 10.63.10.95 auth-port 1812 acct-port 1813" 
     - name: "POSTPONE CONFIGURATION SAVE"
       when: "(set_RADIUSSERVER_CLEARPASS.changed == true)"
       set_fact: configured=true
