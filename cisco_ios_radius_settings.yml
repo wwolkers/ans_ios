@@ -33,7 +33,7 @@
       when: "('10.63.10.95' != get_ios_config.stdout_lines[1][0])"
       register: set_RADIUSSERVER_CLEARPASS
       ios_config:
-        parents; "radius server CLEARPASS-PROD"
+        parents: "radius server CLEARPASS-PROD"
         lines:
           - "no address ipv4 10.63.41.67 auth-port 1812 acct-port 1813"
           - "address ipv4 10.63.10.95 auth-port 1812 acct-port 1813" 
