@@ -18,7 +18,7 @@
 
 
     - name: "SET AAA server radius"
-      when: "('10.63.41' == get_ios_config.stdout_lines[0][0])"
+      when: "('10.63.41' in get_ios_config.stdout_lines[0][0])"
       register: set_AAA_radius
       ios_config:
         parents: "aaa server radius dynamic-author"
