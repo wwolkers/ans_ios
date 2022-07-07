@@ -18,7 +18,7 @@
 
 
     - name: "SET AAA server radius"
-      when: "('10.63.10.95' != get_ios_config.stdout_lines[0][0])"
+      when: "('10.63.41' == get_ios_config.stdout_lines[0][0])"
       register: set_AAA_radius
       ios_config:
         parents: "aaa server radius dynamic-author"
@@ -31,7 +31,7 @@
       set_fact: configured=true
 
     - name: "SET RADIUSSERVER_CLEARPASS"
-      when: "('10.63.10.95' != get_ios_config.stdout_lines[1][0])"
+      when: "('10.63.41' == get_ios_config.stdout_lines[1][0])"
       register: set_RADIUSSERVER_CLEARPASS
       ios_config:
         parents: "radius server CLEARPASS-PROD"
