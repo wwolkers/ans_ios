@@ -1,0 +1,51 @@
+---
+- connection: network_cli
+  gather_facts: false
+  hosts: all
+
+  collections:
+    - cisco.ios
+  tasks: 
+    - name: "Get current settings"
+      register: get_ios_config
+      ios_command:
+        commands:
+          - "show running-config | include client 10.63.41"
+          - "show running-config | include addres ipv4 10.63.41"
+
+#    - debug: var=get_ios_config.stdout_lines
+
+
+
+    - name: "SET AAA server radius"
+      when: "('10.63.10.95' != get_ios_config.stdout_lines[0][0])"
+      register: set_AAA_radius
+      ios_config:
+        lines:
+          - "aaa server radius dynamic-author " 
+          - "client 10.63.10.95 server-key 7 {{ radiuskey }} "
+          - "no client 10.63.41.67 server-key 7 {{ radiuskey }} "
+    - name: "POSTPONE CONFIGURATION SAVE"
+      when: "(set_AAA_radius.changed == true)"
+      set_fact: configured=true
+
+    - name: "SET RADIUSSERVER_CLEARPASS"
+      when: "('10.63.10.95' != get_ios_config.stdout_lines[1][0])"
+      register: set_RADIUSSERVER_CLEARPASS
+      ios_config:
+        lines:
+          - "radius server CLEARPASS-PROD "
+          - "no address ipv4 10.63.41.67 auth-port 1812 acct-port 1813 "
+          - "address ipv4 10.63.10.95 auth-port 1812 acct-port 1813 " 
+    - name: "POSTPONE CONFIGURATION SAVE"
+      when: "(set_RADIUSSERVER_CLEARPASS.changed == true)"
+      set_fact: configured=true
+
+    - name: "SAVE CONFIGURATION"
+      when: "(configured is defined) and (configured == true)"
+      register: save_config
+      ios_command:
+        commands:
+          - "write memory"
+#    -
+#      debug: var=save_config
