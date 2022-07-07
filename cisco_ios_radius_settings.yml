@@ -11,7 +11,7 @@
       ios_command:
         commands:
           - "show running-config | include client 10.63.41"
-          - "show running-config | include addres ipv4 10.63.41"
+          - "show running-config | include address ipv4 10.63.41"
 
 #    - debug: var=get_ios_config.stdout_lines
 
