@@ -23,8 +23,8 @@
       ios_config:
         lines:
           - "aaa server radius dynamic-author " 
-          - "client 10.63.10.95 server-key 7 {{ radiuskey }} "
-          - "no client 10.63.41.67 server-key 7 {{ radiuskey }} "
+          - "client 10.63.10.95 server-key {{ radiuskey }} "
+          - "no client 10.63.41.67 server-key {{ radiuskey }} "
     - name: "POSTPONE CONFIGURATION SAVE"
       when: "(set_AAA_radius.changed == true)"
       set_fact: configured=true
